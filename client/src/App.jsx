@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react'
-import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import Landing from './views/Landing'
+import NotFound from './views/NotFound'
+import Login from './views/Login'
+import Register from './views/Register'
+import Home from './views/Home'
+import Cart from './views/Cart'
+import Detail from './views/Detail'
+import Profile from './views/Profile'
 
 function App() {
   const [date, setDate] = useState("")
@@ -12,6 +20,7 @@ function App() {
       let newDate = new Date(data)
       setDate(newDate)
     } catch (error) {
+      alert("Api no esta funcionando")
       console.log(error)
     }
   }
@@ -23,8 +32,16 @@ function App() {
 
   return (
     <>
-      <h1>Ejemplo APP FullStack</h1>
-      <h2>Fecha que traemos desde el backend = {JSON.stringify(date)}</h2>
+      <Routes>
+        <Route path='/' element={<Landing/>}/>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/register' element={<Register/>}/>
+        <Route path='/home' element={<Home/>}/>
+        <Route path='/cart' element={<Cart/>}/>
+        <Route path='/profile' element={<Profile/>}/>
+        <Route path='/detail/:id' element={<Detail/>}/>
+        <Route path='*' element={<NotFound/>}/>
+      </Routes>
     </>
   )
 }
