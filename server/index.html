@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <form id="uploadForm">
+        <input type="file" name="Image" id="image" accept="image/*" required>
+        <button type="submit">Subir</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        const apikey= "33ce52a04ce83f73197af9f3a42c7cea"
+        const uploadForm = document.querySelector("#uploadForm")
+        const imageFile = document.querySelector("#image")
+        const resultDiv = document.querySelector("#result")
+
+        uploadForm.addEventListener("submit", async(e)=>{
+            e.preventDefault()
+            const file = imageFile.files[0]
+            if(!file){
+                resultDiv.innerHTML= "Selecciona una imagen primero."
+                return
+            }
+            const formData = new FormData();
+            formData.append("key", apikey)
+            formData.append("image", file)
+            resultDiv.innerHTML= "Subiendo..."
+
+            const res = await fetch("https://api.imgbb.com/1/upload",{
+                method: "POST",
+                body: formData
+            })
+            const data = await res.json()
+            console.log(data)
+            if(data.data.url){
+                await fetch("http://localhost:3000/register",{
+                    method: "POST",
+                    body: {username: data.data.url, password: "asdasd"}
+                })
+
+                resultDiv.innerHTML= `<img src='${data.data.url}' alt="jajxd"/>`
+            }
+        })
+
+
+    </script>
+</body>
+</html>
